@@ -9,8 +9,8 @@ defmodule Covid19Web.PageLive do
   end
 
   @impl true
-  def handle_info({:fetched_data, results}, socket), do:
-    {:noreply, update(socket, :results, fn _old -> results end)}
+  def handle_info({:fetched_data, results}, socket),
+    do: {:noreply, update(socket, :results, fn _old -> results end)}
 
   defp fetch_results, do: Covid19.list_all(:by_country)
 end
