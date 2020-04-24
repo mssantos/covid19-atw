@@ -1,4 +1,4 @@
-# COVID-19 stats from around the world
+# COVID-19 stats around the world
 
 For testing the new Phoenix LiveView feature from Phoenix 1.5,
 I've created a project with the COVID-19 stats data around the world.
