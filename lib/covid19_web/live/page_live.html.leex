@@ -1,0 +1,21 @@
+<section>
+  <h1>COVID-19 propagation around the world</h1>
+
+  <table class="fixed-table">
+    <thead>
+      <th>Country</th>
+      <th>Tested</th>
+      <th>Infected</th>
+      <th>Recovedered</th>
+      <th>Deaths</th>
+    </thead>
+
+    <tbody>
+      <%= for entry <- @results do %>
+        <%= live_component @socket, Covid19Web.PageLive.TableEntryComponent, entry: entry %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p><small>Updated every 5 minutes.</small></p>
+</section>
