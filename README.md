@@ -12,8 +12,6 @@ It works as follows:
 This project uses the public APIs from https://apify.com/ for fetching
 the stats.
 
-It doesn't use database! Everything is inserted on [ets](http://erlang.org/doc/man/ets.html).
-
 ## Prerequisites
 ```
 Erlang 20+
