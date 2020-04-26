@@ -15,7 +15,7 @@ defmodule Covid19.Application do
       Covid19Web.Endpoint,
       # Start a worker by calling: Covid19.Worker.start_link(arg)
       # {Covid19.Worker, arg}
-      Covid19.Server
+      Covid19.DataFetcher
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

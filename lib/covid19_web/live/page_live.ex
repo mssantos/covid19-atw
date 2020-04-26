@@ -18,5 +18,5 @@ defmodule Covid19Web.PageLive do
     {:noreply, assign(socket, :results, fetch_results())}
   end
 
-  defp fetch_results, do: Covid19.list_all(:by_country)
+  defp fetch_results, do: Covid19.list_all()
 end

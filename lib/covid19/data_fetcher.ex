@@ -1,12 +1,13 @@
-defmodule Covid19.Server do
+defmodule Covid19.DataFetcher do
   use GenServer
 
   require Jason
   require Logger
 
+  alias Covid19.Store
+
   @fetch_data_interval (Mix.env() == :dev && 10_000) || 5 * 60 * 1_000
   @apify_endpoint 'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
-  @bucket :bucket
 
   # Client
 
@@ -14,23 +15,18 @@ defmodule Covid19.Server do
     GenServer.start_link(__MODULE__, default)
   end
 
-  def lookup(name) do
-    case :ets.lookup(@bucket, name) do
-      [{^name, data}] -> {:ok, data}
-      [] -> :error
-    end
-  end
-
   # Server
 
   @impl true
   def init(_state) do
-    bucket = :ets.new(@bucket, [:set, :protected, :named_table])
-    :ets.insert(@bucket, {:by_country, []})
+    store =
+      Store.create([
+        {:all, []},
+        {:by_country, []}
+      ])
 
     send(self(), :fetch_data)
-
-    {:ok, bucket}
+    {:ok, store}
   end
 
   @impl true
@@ -42,7 +38,7 @@ defmodule Covid19.Server do
         Logger.info("Data fetched.")
         schedule_fetch()
 
-        {:noreply, :ets.insert(@bucket, {:by_country, Jason.decode!(body)})}
+        {:noreply, Store.update({:all, Jason.decode!(body)})}
 
       {:error, reason} ->
         Logger.debug(reason)

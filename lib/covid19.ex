@@ -7,13 +7,8 @@ defmodule Covid19 do
   if it comes from the database, an external API or others.
   """
 
-  def list_all(:by_country) do
-    {:ok, result} = Covid19.Server.lookup(:by_country)
+  def list_all do
+    {:ok, result} = Covid19.Store.lookup(:all)
     result
   end
-
-  def subscribe, do: Phoenix.PubSub.subscribe(Covid19.PubSub, "covid19")
-
-  def broadcast(event),
-    do: Phoenix.PubSub.broadcast(Covid19.PubSub, "covid19", {event, list_all(:by_country)})
 end
