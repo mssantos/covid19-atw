@@ -4,7 +4,7 @@ defmodule Covid19.Server do
   require Jason
   require Logger
 
-  @fetch_data_interval 5 * 60 * 1_000
+  @fetch_data_interval (Mix.env() == :dev && 10_000) || 5 * 60 * 1_000
   @apify_endpoint 'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
   @bucket :bucket
 
@@ -26,10 +26,9 @@ defmodule Covid19.Server do
   @impl true
   def init(_state) do
     bucket = :ets.new(@bucket, [:set, :protected, :named_table])
-
     :ets.insert(@bucket, {:by_country, []})
 
-    schedule_fetch(1_000)
+    send(self(), :fetch_data)
 
     {:ok, bucket}
   end
@@ -37,17 +36,16 @@ defmodule Covid19.Server do
   @impl true
   def handle_info(:fetch_data, state) do
     Logger.info("Fetching data...")
-    Covid19.broadcast(:fetched_data)
 
     case :httpc.request(@apify_endpoint) do
       {:ok, {_status, _headers, body}} ->
-        Logger.info("Everything is fine!")
+        Logger.info("Data fetched.")
         schedule_fetch()
 
         {:noreply, :ets.insert(@bucket, {:by_country, Jason.decode!(body)})}
 
-      {:error, err} ->
-        Logger.debug(err)
+      {:error, reason} ->
+        Logger.debug(reason)
         {:noreply, state}
     end
   end
@@ -57,7 +55,7 @@ defmodule Covid19.Server do
     {:noreply, {names, refs}}
   end
 
-  defp schedule_fetch(interval \\ @fetch_data_interval) do
-    Process.send_after(self(), :fetch_data, interval)
+  defp schedule_fetch do
+    Process.send_after(self(), :fetch_data, @fetch_data_interval)
   end
 end
