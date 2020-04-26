@@ -17,7 +17,32 @@ defmodule Covid19.Store do
     end
   end
 
-  def update(data) do
-    :ets.insert(@store_name, data)
+  def update(name, data) do
+    :ets.insert(@store_name, {name, data})
+  end
+
+  def update_summary(data) do
+    :ets.insert(@store_name, {:summary, aggregate(data)})
+  end
+
+  defp aggregate(data) do
+    %{
+      "infected" => aggregate_by(data, "infected"),
+      "tested" => aggregate_by(data, "tested"),
+      "recovered" => aggregate_by(data, "recovered"),
+      "deceased" => aggregate_by(data, "deceased")
+    }
+  end
+
+  defp aggregate_by(data, key) do
+    Enum.reduce(data, 0, fn item, acc ->
+      case value = item[key] do
+        v when is_integer(value) ->
+          v + acc
+
+        _ ->
+          acc
+      end
+    end)
   end
 end
