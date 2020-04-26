@@ -22,7 +22,8 @@ defmodule Covid19.DataFetcher do
     store =
       Store.create([
         {:all, []},
-        {:by_country, []}
+        {:by_country, []},
+        {:summary, %{}}
       ])
 
     send(self(), :fetch_data)
@@ -36,9 +37,13 @@ defmodule Covid19.DataFetcher do
     case :httpc.request(@apify_endpoint) do
       {:ok, {_status, _headers, body}} ->
         Logger.info("Data fetched.")
+
+        decoded_body = Jason.decode!(body)
+        Store.update(:all, decoded_body)
+        Store.update_summary(decoded_body)
         schedule_fetch()
 
-        {:noreply, Store.update({:all, Jason.decode!(body)})}
+        {:noreply, state}
 
       {:error, reason} ->
         Logger.debug(reason)

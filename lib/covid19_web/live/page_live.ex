@@ -10,7 +10,7 @@ defmodule Covid19Web.PageLive do
     if connected?(socket), do: :timer.send_interval(@update_interval, self(), :update)
 
     data = fetch_results()
-    {:ok, assign(socket, [results: data, summary: fetch_summary(data)])}
+    {:ok, assign(socket, [results: data, summary: fetch_summary()])}
   end
 
   @impl true
@@ -18,10 +18,10 @@ defmodule Covid19Web.PageLive do
     Logger.info("Preparing update...")
     data = fetch_results()
 
-    {:noreply, assign(socket, [results: data, summary: fetch_summary(data)])}
+    {:noreply, assign(socket, [results: data, summary: fetch_summary()])}
   end
 
   defp fetch_results, do: Covid19.list_all()
 
-  defp fetch_summary(results), do: Covid19.aggregate(results)
+  defp fetch_summary, do: Covid19.get_summary()
 end
