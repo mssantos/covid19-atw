@@ -1,18 +1,34 @@
 <section>
-  <h1>COVID-19 propagation around the world</h1>
+  <h1>COVID-19's spread</h1>
 
   <table class="fixed-table">
     <thead>
-      <th>Country</th>
+      <th>Location</th>
       <th>Infected</th>
       <th>Tested</th>
       <th>Recovered</th>
       <th>Deaths</th>
     </thead>
 
+    <tfoot>
+      <tr>
+        <td>Total</td>
+        <td><%= @summary["infected"] %></td>
+        <td><%= @summary["tested"] %></td>
+        <td><%= @summary["recovered"] %></td>
+        <td><%= @summary["deceased"] %></td>
+      </tr>
+    </tfoot>
+
     <tbody>
       <%= for entry <- @results do %>
-        <%= live_component @socket, Covid19Web.PageLive.TableEntryComponent, entry: entry %>
+        <tr>
+          <td><%= entry["country"] %></td>
+          <td><%= entry["infected"] || "-" %></td>
+          <td><%= entry["tested"] || "-" %></td>
+          <td><%= entry["recovered"] || "-" %></td>
+          <td><%= entry["deceased"] || "-" %></td>
+        </tr>
       <% end %>
     </tbody>
   </table>
