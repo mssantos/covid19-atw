@@ -11,7 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :covid19, Covid19Web.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [scheme: "https", host: "hidden-meadow-69110.herokuapp.com", port: 443],
+  url: [scheme: "https", host: "covid19-atw.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
