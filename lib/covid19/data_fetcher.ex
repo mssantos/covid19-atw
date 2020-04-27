@@ -7,7 +7,7 @@ defmodule Covid19.DataFetcher do
   alias Covid19.Store
 
   @fetch_intervals %{
-    worldwide: (Mix.env() == :dev && 10_000) || 5 * 60 * 1_000
+    worldwide: 10 * 60 * 1_000
   }
 
   @apify_endpoints %{
@@ -42,13 +42,13 @@ defmodule Covid19.DataFetcher do
         schedule_fetch(:worldwide)
         {:noreply, state}
 
-      {:error, reason} ->
+      {:error, _reason} ->
         {:noreply, state}
     end
   end
 
   @impl true
-  def handle_info(message, state) do
+  def handle_info(_message, state) do
     {:noreply, state}
   end
 

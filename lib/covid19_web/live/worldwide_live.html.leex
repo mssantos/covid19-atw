@@ -1,35 +1,61 @@
 <section>
   <h1>COVID-19's spread worldwide</h1>
 
-  <table class="fixed-table">
-    <thead>
-      <th>Country</th>
-      <th>Infected</th>
-      <th>Tested</th>
-      <th>Recovered</th>
-      <th>Deaths</th>
-    </thead>
+  <div style="display: flex; justify-content: space-between;">
+    <form action="#" phx-change="search" style="flex: 1; margin-right: 1em;">
+      <legend>Search:</legend>
+      <label for="query">
+        <input type="search" name="query" value="<%= @query %>" placeholder="Enter a name of a country..." />
+      </label>
+    </form>
 
-    <tfoot>
-      <tr>
-        <td>Total</td>
-        <td><%= @summary["infected"] %></td>
-        <td><%= @summary["tested"] %></td>
-        <td><%= @summary["recovered"] %></td>
-        <td><%= @summary["deceased"] %></td>
-      </tr>
-    </tfoot>
+    <form action="#" phx-change="sort_by">
+      <legend>Order by:</legend>
+      <label for="select">
+        <select id="select" name="sort_by">
+          <%= content_tag(:option, "Select", value: "", selected: @sort_by == "") %>
+          <%= content_tag(:option, "Infected", value: "infected", selected: @sort_by == "infected") %>
+          <%= content_tag(:option, "Tested", value: "tested", selected: @sort_by == "tested") %>
+          <%= content_tag(:option, "Recovered", value: "recovered", selected: @sort_by == "recovered") %>
+          <%= content_tag(:option, "Deaths", value: "deceased", selected: @sort_by == "deceased") %>
+        </select>
+      </label>
+    </form>
+  </div>
 
-    <tbody>
-      <%= for entry <- @results do %>
+  <%= if length(@results) == 0 do %>
+    <p>There's no results for <i><%= @query %></i>.</p>
+  <% else %>
+    <table class="fixed-table">
+      <thead>
+        <th>Country</th>
+        <th>Infected</th>
+        <th>Tested</th>
+        <th>Recovered</th>
+        <th>Deaths</th>
+      </thead>
+
+      <tfoot>
         <tr>
-          <td><a href='<%= entry["moreData"] %>' target="_blank" noopener noreferer><%= entry["country"] %></a></td>
-          <td><%= entry["infected"] || "-" %></td>
-          <td><%= entry["tested"] || "-" %></td>
-          <td><%= entry["recovered"] || "-" %></td>
-          <td><%= entry["deceased"] || "-" %></td>
+          <td>Total</td>
+          <td><%= @summary["infected"] %></td>
+          <td><%= @summary["tested"] %></td>
+          <td><%= @summary["recovered"] %></td>
+          <td><%= @summary["deceased"] %></td>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </tfoot>
+
+      <tbody>
+        <%= for entry <- @results do %>
+          <tr>
+            <td><a href='<%= entry["moreData"] %>' target="_blank" noopener noreferer><%= entry["country"] %></a></td>
+            <td><%= entry["infected"] || "-" %></td>
+            <td><%= entry["tested"] || "-" %></td>
+            <td><%= entry["recovered"] || "-" %></td>
+            <td><%= entry["deceased"] || "-" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
 </section>
