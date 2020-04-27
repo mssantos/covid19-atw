@@ -10,8 +10,9 @@ defmodule Covid19Web.WorldwideLive do
     socket = socket
       |> assign(:results, fetch_data(:worldwide))
       |> assign(:summary, fetch_data(:summary))
-      |> assign(:sort_by, "")
+      |> assign(:sort_by, "country")
       |> assign(:query, "")
+      |> assign(:last_update_at, last_update_at())
 
     {:ok, socket}
   end
@@ -21,6 +22,7 @@ defmodule Covid19Web.WorldwideLive do
       |> assign(:results, Covid19.sort_by(fetch_data(:worldwide), socket.assigns.sort_by))
       |> assign(:summary, fetch_data(:summary))
       |> assign(:query, "")
+      |> assign(:last_update_at, last_update_at())
 
     {:noreply, socket}
   end
@@ -51,4 +53,10 @@ defmodule Covid19Web.WorldwideLive do
   end
 
   defp fetch_data(context), do: Covid19.get_data(context)
+
+  defp last_update_at do
+    NaiveDateTime.utc_now()
+    |> NaiveDateTime.truncate(:second)
+    |> NaiveDateTime.to_string()
+  end
 end

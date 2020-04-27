@@ -2,7 +2,7 @@
   <h1>COVID-19's spread worldwide</h1>
 
   <div style="display: flex; justify-content: space-between;">
-    <form action="#" phx-change="search" style="flex: 1; margin-right: 1em;">
+    <form action="#" phx-submit="search" phx-change="search" style="flex: 1; margin-right: 1em;">
       <legend>Search:</legend>
       <label for="query">
         <input type="search" name="query" value="<%= @query %>" placeholder="Enter a name of a country..." />
@@ -13,7 +13,7 @@
       <legend>Order by:</legend>
       <label for="select">
         <select id="select" name="sort_by">
-          <%= content_tag(:option, "Select", value: "", selected: @sort_by == "") %>
+          <%= content_tag(:option, "Country", value: "", selected: @sort_by == "country") %>
           <%= content_tag(:option, "Infected", value: "infected", selected: @sort_by == "infected") %>
           <%= content_tag(:option, "Tested", value: "tested", selected: @sort_by == "tested") %>
           <%= content_tag(:option, "Recovered", value: "recovered", selected: @sort_by == "recovered") %>
@@ -57,5 +57,9 @@
         <% end %>
       </tbody>
     </table>
+
+    <p>
+      <small>Last update at <%= @last_update_at %>.</small>
+    </p>
   <% end %>
 </section>
