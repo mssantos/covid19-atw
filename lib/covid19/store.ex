@@ -17,12 +17,19 @@ defmodule Covid19.Store do
     end
   end
 
-  def update(name, data) do
-    :ets.insert(@store_name, {name, data})
+  def update(result) do
+    do_update({:summary, aggregate(result)})
+    do_update({:worldwide, result})
+    Covid19.broadcast("store", {:store_updated, :worldwide})
   end
 
-  def update_summary(data) do
-    :ets.insert(@store_name, {:summary, aggregate(data)})
+  def update(context, result) do
+    do_update({context, result})
+    Covid19.broadcast("store", {:store_updated, context})
+  end
+
+  defp do_update(data) do
+    :ets.insert(@store_name, data)
   end
 
   defp aggregate(data) do

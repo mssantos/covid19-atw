@@ -17,7 +17,7 @@ defmodule Covid19Web.Router do
   scope "/", Covid19Web do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    live "/", WorldwideLive, :index
   end
 
   # Other scopes may use custom stacks.

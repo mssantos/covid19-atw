@@ -6,8 +6,13 @@ defmodule Covid19.DataFetcher do
 
   alias Covid19.Store
 
-  @fetch_data_interval (Mix.env() == :dev && 10_000) || 5 * 60 * 1_000
-  @apify_endpoint 'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
+  @fetch_intervals %{
+    worldwide: (Mix.env() == :dev && 10_000) || 5 * 60 * 1_000
+  }
+
+  @apify_endpoints %{
+    worldwide: 'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
+  }
 
   # Client
 
@@ -19,44 +24,49 @@ defmodule Covid19.DataFetcher do
 
   @impl true
   def init(_state) do
-    store =
-      Store.create([
-        {:all, []},
-        {:by_country, []},
-        {:summary, %{}}
-      ])
+    store = Store.create([
+      {:worldwide, []},
+      {:summary, %{}}
+    ])
 
-    send(self(), :fetch_data)
+    send(self(), :fetch_worldwide)
+
     {:ok, store}
   end
 
   @impl true
-  def handle_info(:fetch_data, state) do
-    Logger.info("Fetching data...")
-
-    case :httpc.request(@apify_endpoint) do
-      {:ok, {_status, _headers, body}} ->
-        Logger.info("Data fetched.")
-
-        decoded_body = Jason.decode!(body)
-        Store.update(:all, decoded_body)
-        Store.update_summary(decoded_body)
-        schedule_fetch()
-
+  def handle_info(:fetch_worldwide, state) do
+    case request(@apify_endpoints.worldwide) do
+      {:ok, result} ->
+        Store.update(result)        
+        schedule_fetch(:worldwide)
         {:noreply, state}
 
       {:error, reason} ->
-        Logger.debug(reason)
         {:noreply, state}
     end
   end
 
   @impl true
-  def handle_info({:DOWN, _ref, :process, _pid, _reason}, {names, refs}) do
-    {:noreply, {names, refs}}
+  def handle_info(message, state) do
+    {:noreply, state}
   end
 
-  defp schedule_fetch do
-    Process.send_after(self(), :fetch_data, @fetch_data_interval)
+  defp schedule_fetch(:worldwide) do
+    Process.send_after(self(), :fetch_worldwide, @fetch_intervals.worldwide)
+  end
+
+  defp request(endpoint) do
+    Logger.info("Requesting data...")
+
+    case :httpc.request(endpoint) do
+      {:ok, {_status, _headers, body}} ->
+        Logger.info("Data received.")
+        {:ok, Jason.decode!(body)}
+
+      {:error, reason} ->
+        Logger.debug(reason)
+        {:error, reason}
+    end
   end
 end

@@ -1,9 +1,9 @@
 <section>
-  <h1>COVID-19's spread</h1>
+  <h1>COVID-19's spread worldwide</h1>
 
   <table class="fixed-table">
     <thead>
-      <th>Location</th>
+      <th>Country</th>
       <th>Infected</th>
       <th>Tested</th>
       <th>Recovered</th>
@@ -23,7 +23,7 @@
     <tbody>
       <%= for entry <- @results do %>
         <tr>
-          <td><%= entry["country"] %></td>
+          <td><a href='<%= entry["moreData"] %>' target="_blank" noopener noreferer><%= entry["country"] %></a></td>
           <td><%= entry["infected"] || "-" %></td>
           <td><%= entry["tested"] || "-" %></td>
           <td><%= entry["recovered"] || "-" %></td>
@@ -32,6 +32,4 @@
       <% end %>
     </tbody>
   </table>
-
-  <p><small>Updated every 5 minutes.</small></p>
 </section>
