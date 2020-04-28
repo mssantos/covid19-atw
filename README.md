@@ -1,20 +1,14 @@
-# COVID-19 stats around the world
+# COVID-19's outbreak worldwide
 
 See it [live](https://covid19-atw.herokuapp.com/)!.
 
 ---
 
-For testing the new Phoenix LiveView feature from Phoenix 1.5,
-I've created a project with the COVID-19 spread around the world.
+For testing the new Phoenix LiveView feature,
+I've created a project that shows data from the COVID-19's outbreak.
 
-It works as follows:
-
-- GenServer fetching new COVID-19 data every 10 minutes;
-- Broadcast event for WorldwideLive component;
-- Update the content of the table with the new data.
-
-This project uses the public APIs from https://apify.com/ for fetching
-the stats.
+This project uses the public APIs available on https://apify.com/ for gathering
+data.
 
 ## Prerequisites
 ```
@@ -49,5 +43,4 @@ The project will be served on `localhost:4000`.
 ## TODO
 
 - [ ] Tests!
-- [x] Consolidate number of cases
 - [ ] Print data on a map using [d3](https://d3js.org/)?
