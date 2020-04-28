@@ -38,10 +38,10 @@
       <tfoot>
         <tr>
           <td>Total</td>
-          <td><%= @summary["infected"] %></td>
-          <td><%= @summary["tested"] %></td>
-          <td><%= @summary["recovered"] %></td>
-          <td><%= @summary["deceased"] %></td>
+          <td><%= number_to_delimited(@summary["infected"], precision: 0) %></td>
+          <td><%= number_to_delimited(@summary["tested"], precision: 0) %></td>
+          <td><%= number_to_delimited(@summary["recovered"], precision: 0) %></td>
+          <td><%= number_to_delimited(@summary["deceased"], precision: 0) %></td>
         </tr>
       </tfoot>
 
@@ -49,10 +49,10 @@
         <%= for entry <- @results do %>
           <tr>
             <td><a href='<%= entry["moreData"] %>' target="_blank" noopener noreferer><%= entry["country"] %></a></td>
-            <td><%= entry["infected"] || "-" %></td>
-            <td><%= entry["tested"] || "-" %></td>
-            <td><%= entry["recovered"] || "-" %></td>
-            <td><%= entry["deceased"] || "-" %></td>
+            <td><%= is_integer(entry["infected"]) && number_to_delimited(entry["infected"], precision: 0) || "-" %></td>
+            <td><%= is_integer(entry["tested"]) && number_to_delimited(entry["tested"], precision: 0) || "-" %></td>
+            <td><%= is_integer(entry["recovered"]) && number_to_delimited(entry["recovered"], precision: 0) || "-" %></td>
+            <td><%= is_integer(entry["deceased"]) && number_to_delimited(entry["deceased"], precision: 0) || "-" %></td>
           </tr>
         <% end %>
       </tbody>

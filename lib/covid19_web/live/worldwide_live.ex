@@ -3,6 +3,8 @@ defmodule Covid19Web.WorldwideLive do
 
   use Covid19Web, :live_view
 
+  import Number.Delimit
+
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Covid19.subscribe("store")
