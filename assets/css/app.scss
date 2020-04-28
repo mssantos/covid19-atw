@@ -25,3 +25,28 @@
   pointer-events: none;
 }
 
+.fixed-table {
+  position: relative;
+
+  td,
+  th {
+    padding: 0.5em 1em;
+  }
+
+  tr th {
+    background-color: #eee;
+  }
+
+  tr:nth-child(even) {
+    background-color: rgba(#eee, .25);
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+  }
+
+  tfoot {
+    font-weight: bold;
+  }
+}
