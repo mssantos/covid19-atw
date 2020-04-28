@@ -1,10 +1,6 @@
 # COVID-19's outbreak worldwide
 
-See it [live](https://covid19-atw.herokuapp.com/)!.
-
----
-
-For testing the new Phoenix LiveView feature,
+For testing the new Phoenix LiveView features,
 I've created a project that shows data from the COVID-19's outbreak.
 
 This project uses the public APIs available on https://apify.com/ for gathering
