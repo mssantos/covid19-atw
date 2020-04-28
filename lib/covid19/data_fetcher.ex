@@ -45,6 +45,7 @@ defmodule Covid19.DataFetcher do
         {:noreply, state}
 
       {:error, _reason} ->
+        schedule_fetch(:worldwide)
         {:noreply, state}
     end
   end
