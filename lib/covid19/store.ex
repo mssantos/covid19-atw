@@ -19,7 +19,7 @@ defmodule Covid19.Store do
 
   def update(result) do
     do_update({:summary, aggregate(result)})
-    do_update({:worldwide, result})
+    do_update({:worldwide, take(result)})
     Covid19.broadcast("store", {:store_updated, :worldwide})
   end
 
@@ -51,5 +51,9 @@ defmodule Covid19.Store do
           acc
       end
     end)
+  end
+
+  defp take(data) do
+    Enum.map(data, &(Map.take(&1, ["country", "infected", "tested", "recovered", "deceased", "moreData"])))
   end
 end

@@ -17,6 +17,7 @@ defmodule Covid19Web.WorldwideLive do
     {:ok, socket}
   end
 
+  @impl true
   def handle_info({:store_updated, :worldwide}, socket) do
     socket = socket
       |> assign(:results, Covid19.sort_by(fetch_data(:worldwide), socket.assigns.sort_by))
@@ -27,10 +28,12 @@ defmodule Covid19Web.WorldwideLive do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_info(_message, socket) do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("sort_by", %{"sort_by" => sort_by}, socket) do
     ordered = Covid19.sort_by(socket.assigns.results, sort_by)
 
@@ -41,6 +44,7 @@ defmodule Covid19Web.WorldwideLive do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("search", %{"query" => query}, socket) do
     query = String.trim(query)
 
