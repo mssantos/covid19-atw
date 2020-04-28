@@ -54,6 +54,9 @@ defmodule Covid19.Store do
   end
 
   defp take(data) do
-    Enum.map(data, &(Map.take(&1, ["country", "infected", "tested", "recovered", "deceased", "moreData"])))
+    Enum.map(
+      data,
+      &Map.take(&1, ["country", "infected", "tested", "recovered", "deceased", "moreData"])
+    )
   end
 end

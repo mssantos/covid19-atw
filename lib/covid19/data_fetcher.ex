@@ -11,7 +11,8 @@ defmodule Covid19.DataFetcher do
   }
 
   @apify_endpoints %{
-    worldwide: 'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
+    worldwide:
+      'https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true'
   }
 
   # Client
@@ -24,10 +25,11 @@ defmodule Covid19.DataFetcher do
 
   @impl true
   def init(_state) do
-    store = Store.create([
-      {:worldwide, []},
-      {:summary, %{}}
-    ])
+    store =
+      Store.create([
+        {:worldwide, []},
+        {:summary, %{}}
+      ])
 
     send(self(), :fetch_worldwide)
 
@@ -38,7 +40,7 @@ defmodule Covid19.DataFetcher do
   def handle_info(:fetch_worldwide, state) do
     case request(@apify_endpoints.worldwide) do
       {:ok, result} ->
-        Store.update(result)        
+        Store.update(result)
         schedule_fetch(:worldwide)
         {:noreply, state}
 

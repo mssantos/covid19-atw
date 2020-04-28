@@ -19,14 +19,16 @@ defmodule Covid19 do
     do: Phoenix.PubSub.broadcast(Covid19.PubSub, topic, message)
 
   def sort_by(_data, ""), do: get_data(:worldwide)
+
   def sort_by(data, term) do
-    filtered = Enum.filter(data, &(is_integer(&1[term])))
+    filtered = Enum.filter(data, &is_integer(&1[term]))
     rejected = data -- filtered
-    result = Enum.sort_by(filtered, &(&1[term]), :desc)
+    result = Enum.sort_by(filtered, & &1[term], :desc)
     result ++ rejected
   end
 
   def search(_data, ""), do: get_data(:worldwide)
+
   def search(data, query) do
     Enum.filter(data, &(String.downcase(&1["country"]) =~ String.downcase(query)))
   end
