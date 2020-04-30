@@ -20,7 +20,7 @@ defmodule Covid19.MixProject do
   def application do
     [
       mod: {Covid19.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
