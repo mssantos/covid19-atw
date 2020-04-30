@@ -28,6 +28,7 @@ defmodule Covid19Web.WorldwideLive do
       |> assign(:summary, fetch_data(:summary))
       |> assign(:query, "")
       |> assign(:last_update_at, last_update_at())
+      |> put_flash(:info, "Data updated.")
 
     {:noreply, socket}
   end
